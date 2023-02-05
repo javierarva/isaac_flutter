@@ -1,8 +1,8 @@
 class Items {
   int? id;
   late String name;
-  late int description;
-  late int image;
+  late String description;
+  late String image;
 
   Items({
     this.id,

@@ -17,7 +17,6 @@ class _AddItemsScreenState extends State<AddItemsScreen> {
   late String image;
   var formKey = GlobalKey<FormState>();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,8 +75,7 @@ class _AddItemsScreenState extends State<AddItemsScreen> {
 
                 ElevatedButton(onPressed: () async {
 
-                  if( formKey.currentState!.validate()){
-
+                  if(formKey.currentState!.validate()){
                     var items = Items(name: name, description: description, image: image);
 
                     var dbHelper =  DatabaseHelper.instance;
@@ -88,14 +86,12 @@ class _AddItemsScreenState extends State<AddItemsScreen> {
                     }
                   }
 
-
                 }, child: const Text('Guardar')),
                 ElevatedButton(onPressed: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (context){
                     return const ItemsListScreen();
                   }));
-                }, child: const Text('Ver listado de Items')),
-
+                }, child: const Text('Ver listado de Ítems')),
               ],
             ),
           ),

@@ -70,7 +70,7 @@ class _CharactersListScreenState extends State<CharactersListScreen> {
                                                 await Navigator.of(context)
                                                     .push(MaterialPageRoute(
                                                         builder: (context) {
-                                              return UpdateCharactersScreen(Characters: characters);
+                                              return UpdateCharactersScreen(characters: characters);
                                             }));
 
                                             if (result == 'done') {
@@ -88,7 +88,7 @@ class _CharactersListScreenState extends State<CharactersListScreen> {
                                                     title:
                                                         const Text('¡ATENCIÓN!'),
                                                     content: const Text(
-                                                        '¿Estás seguro de que quieres eliminar?'),
+                                                        '¿Estás seguro de que quieres eliminarlo?'),
                                                     actions: [
                                                       TextButton(
                                                           onPressed: () {
@@ -119,7 +119,7 @@ class _CharactersListScreenState extends State<CharactersListScreen> {
                                                             }
                                                           },
                                                           child: const Text(
-                                                              'Yes')),
+                                                              'Sí')),
                                                     ],
                                                   );
                                                 });

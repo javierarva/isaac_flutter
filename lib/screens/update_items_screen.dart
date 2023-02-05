@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:isaac_flutter/models/items.dart';
-
 import '../db/database_helper.dart';
 
 class UpdateItemsScreen extends StatefulWidget {
@@ -17,7 +16,6 @@ class _UpdateItemsScreenState extends State<UpdateItemsScreen> {
   late String name;
   late String description;
   late String image;
-
 
   var formKey = GlobalKey<FormState>();
 
@@ -88,7 +86,7 @@ class _UpdateItemsScreenState extends State<UpdateItemsScreen> {
                         int result = await dbHelper.updateItem(items);
 
                         if (result > 0) {
-                          Fluttertoast.showToast(msg: 'Ítem actualizado');
+                          Fluttertoast.showToast(msg: 'Ítem Actualizado');
                           Navigator.pop(context, 'Hecho');
 
                         }
