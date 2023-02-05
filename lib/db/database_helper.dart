@@ -1,17 +1,14 @@
 import 'dart:io';
-
-import 'package:dogs_db_pseb_bridge/models/cv.dart';
+import 'package:isaac_flutter/models/items.dart';
+import 'package:isaac_flutter/models/characters.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
-  // database
-  DatabaseHelper._privateConstructor(); // Name constructor to create instance of database
+  DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
   static Database? _database;
-
-  // getter for database
 
   Future<Database> get database async {
     _database ??= await initializeDatabase();
@@ -19,69 +16,96 @@ class DatabaseHelper {
   }
 
   Future<Database> initializeDatabase() async {
-    // Get the directory path for both Android and iOS
-    // to store database
-
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = '${directory.path}/dogs.db';
+    String path = '${directory.path}/isaac.db';
 
-    // open/ create database at a given path
-    var studentsDatabase = await openDatabase(
+    var isaacDatabase = await openDatabase(
       path,
       version: 1,
       onCreate: _createDb,
     );
 
-    return studentsDatabase;
+    return isaacDatabase;
   }
 
   void _createDb(Database db, int newVersion) async {
-    await db.execute('''Create TABLE tbl_dog (
+    await db.execute('''Create TABLE items (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
                   name TEXT,
-                  age INTEGER)
+                  description TEXT,
+                  image TEXT);
+                  Create TABLE characters (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  name TEXT,
+                  object TEXT,
+                  image TEXT);
     
     ''');
   }
 
-  // insert
-  Future<int> insertDog(CV dog) async {
-    // add dog to table
-
+  Future<int> insertItem(Items item) async {
     Database db = await instance.database;
-    int result = await db.insert('tbl_dog', dog.toMap());
+    int result = await db.insert('items', item.toMap());
     return result;
   }
 
-  // read operation
-  Future<List<CV>> getAllDogs() async {
-    List<CV> dogs = [];
+  Future<List<Items>> getAllItems() async {
+    List<Items> items = [];
 
     Database db = await instance.database;
 
-    // read data from table
-    List<Map<String, dynamic>> listMap = await db.query('tbl_dog');
+    List<Map<String, dynamic>> listMap = await db.query('items');
 
-    for (var dogMap in listMap) {
-      CV dog = CV.fromMap(dogMap);
-      dogs.add(dog);
+    for (var itemMap in listMap) {
+      Items item = Items.fromMap(itemMap);
+      items.add(item);
     }
 
-    return dogs;
+    return items;
   }
 
-
-  // delete
-  Future<int> deleteDog(int id) async {
+  Future<int> deleteItem(int id) async {
     Database db = await instance.database;
-    int result = await db.delete('tbl_dog', where: 'id=?', whereArgs: [id]);
+    int result = await db.delete('items', where: 'id=?', whereArgs: [id]);
     return result;
   }
 
-  // update
-  Future<int> updateCV(CV dog) async {
+  Future<int> updateItem(Items item) async {
     Database db = await instance.database;
-    int result = await db.update('tbl_dog', dog.toMap(), where: 'id=?', whereArgs: [dog.id]);
+    int result = await db.update('items', item.toMap(), where: 'id=?', whereArgs: [item.id]);
+    return result;
+  }
+
+  Future<int> insertCharacter(Characters character) async {
+    Database db = await instance.database;
+    int result = await db.insert('characters', character.toMap());
+    return result;
+  }
+
+  Future<List<Characters>> getAllCharacters() async {
+    List<Characters> characters = [];
+
+    Database db = await instance.database;
+
+    List<Map<String, dynamic>> listMap = await db.query('characters');
+
+    for (var characterMap in listMap) {
+      Characters character = Characters.fromMap(characterMap);
+      characters.add(character);
+    }
+
+    return characters;
+  }
+
+  Future<int> deleteCharacter(int id) async {
+    Database db = await instance.database;
+    int result = await db.delete('characters', where: 'id=?', whereArgs: [id]);
+    return result;
+  }
+
+  Future<int> updateCharacter(Characters character) async {
+    Database db = await instance.database;
+    int result = await db.update('characters', character.toMap(), where: 'id=?', whereArgs: [character.id]);
     return result;
   }
 
