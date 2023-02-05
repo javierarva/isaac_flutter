@@ -1,8 +1,8 @@
 class Characters {
   int? id;
   late String name;
-  late int object;
-  late int image;
+  late String object;
+  late String image;
 
   Characters({
     this.id,

@@ -76,7 +76,6 @@ class _AddCharactersScreenState extends State<AddCharactersScreen> {
                 ElevatedButton(onPressed: () async {
 
                   if(formKey.currentState!.validate()){
-
                     var characters = Characters(name: name, object: object, image: image);
 
                     var dbHelper =  DatabaseHelper.instance;
@@ -86,7 +85,6 @@ class _AddCharactersScreenState extends State<AddCharactersScreen> {
                       Fluttertoast.showToast(msg: 'Guardando Personaje...');
                     }
                   }
-
 
                 }, child: const Text('Guardar Personaje')),
                 ElevatedButton(onPressed: (){

@@ -2,9 +2,7 @@ import 'package:isaac_flutter/db/database_helper.dart';
 import 'package:isaac_flutter/screens/update_items_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../models/items.dart';
-
 
 class ItemsListScreen extends StatefulWidget {
   const ItemsListScreen({Key? key}) : super(key: key);
@@ -29,7 +27,8 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
             );
           } else {
             if (snapshot.data!.isEmpty) {
-              return const Center(child: Text('No se encuentran ítem en la Base de datos'));
+              return const Center(
+                  child: Text('No se encuentran ítems en la Base de Datos'));
             } else {
               List<Items> isaac = snapshot.data!;
               return Padding(
@@ -47,7 +46,7 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           item.name,
@@ -67,13 +66,14 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
                                       IconButton(
                                           onPressed: () async {
                                             var result =
-                                            await Navigator.of(context)
-                                                .push(MaterialPageRoute(
-                                                builder: (context) {
-                                                  return UpdateItemsScreen(items: item);
-                                                }));
+                                                await Navigator.of(context)
+                                                    .push(MaterialPageRoute(
+                                                        builder: (context) {
+                                              return UpdateItemsScreen(
+                                                  items: item);
+                                            }));
 
-                                            if (result == 'done') {
+                                            if (result == 'Hecho') {
                                               setState(() {});
                                             }
                                           },
@@ -86,43 +86,40 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
                                                 builder: (context) {
                                                   return AlertDialog(
                                                     title: const Text(
-                                                        'ATENCIÓN!'),
+                                                        '¡ATENCIÓN!'),
                                                     content: const Text(
-                                                        'Estas seguro de que quieres eliminar?'),
+                                                        '¿Estás seguro de que quieres eliminarlo?'),
                                                     actions: [
                                                       TextButton(
                                                           onPressed: () {
                                                             Navigator.of(
-                                                                context)
+                                                                    context)
                                                                 .pop();
                                                           },
                                                           child:
-                                                          const Text('No')),
+                                                              const Text('No')),
                                                       TextButton(
                                                           onPressed: () async {
                                                             Navigator.of(
-                                                                context)
+                                                                    context)
                                                                 .pop();
 
-                                                            // delete dog
-
                                                             int result =
-                                                            await DatabaseHelper
-                                                                .instance
-                                                                .deleteItem(
-                                                                item.id!);
+                                                                await DatabaseHelper
+                                                                    .instance
+                                                                    .deleteItem(
+                                                                        item.id!);
 
                                                             if (result > 0) {
                                                               Fluttertoast
                                                                   .showToast(
-                                                                  msg:
-                                                                  'Eliminando...');
+                                                                      msg:
+                                                                          'Eliminando...');
                                                               setState(() {});
-                                                              // build function will be called
                                                             }
                                                           },
-                                                          child: const Text(
-                                                              'Yes')),
+                                                          child:
+                                                              const Text('Sí')),
                                                     ],
                                                   );
                                                 });
