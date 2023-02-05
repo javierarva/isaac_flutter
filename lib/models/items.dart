@@ -1,28 +1,29 @@
-class CV {
+class Items {
   int? id;
   late String name;
-  late int age;
+  late int description;
+  late int image;
 
-  CV({
+  Items({
     this.id,
     required this.name,
-    required this.age,
+    required this.description,
+    required this.image,
   });
 
-  // Convert a Dog into a Map. The keys must correspond to the names of the
-  // columns in the database.
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-      'age': age,
+      'description': description,
+      'image': image,
     };
   }
 
-  // Convert a Map to a Dog Object
-  CV.fromMap(Map<String, dynamic> map) {
+  Items.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     name = map['name'];
-    age = map['age'];
+    description = map['description'];
+    image = map['image'];
   }
 }
