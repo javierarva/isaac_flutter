@@ -1,42 +1,43 @@
-import 'package:dogs_db_pseb_bridge/db/database_helper.dart';
-import 'package:dogs_db_pseb_bridge/screens/update_cv_screen.dart';
+import 'package:isaac_flutter/db/database_helper.dart';
+import 'package:isaac_flutter/screens/update_items_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../models/cv.dart';
+import '../models/items.dart';
 
-class CVListScreen extends StatefulWidget {
-  const CVListScreen({Key? key}) : super(key: key);
+
+class ItemsListScreen extends StatefulWidget {
+  const ItemsListScreen({Key? key}) : super(key: key);
 
   @override
-  State<CVListScreen> createState() => _CVListScreenState();
+  State<ItemsListScreen> createState() => _ItemsListScreenState();
 }
 
-class _CVListScreenState extends State<CVListScreen> {
+class _ItemsListScreenState extends State<ItemsListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista de Compra/Venta'),
+        title: const Text('Lista de Ítems'),
       ),
-      body: FutureBuilder<List<CV>>(
-        future: DatabaseHelper.instance.getAllDogs(),
-        builder: (BuildContext context, AsyncSnapshot<List<CV>> snapshot) {
+      body: FutureBuilder<List<Items>>(
+        future: DatabaseHelper.instance.getAllItems(),
+        builder: (BuildContext context, AsyncSnapshot<List<Items>> snapshot) {
           if (!snapshot.hasData) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           } else {
             if (snapshot.data!.isEmpty) {
-              return const Center(child: Text('No se encuentran Compra/Venta en la Base de datos'));
+              return const Center(child: Text('No se encuentran ítem en la Base de datos'));
             } else {
-              List<CV> cove = snapshot.data!;
+              List<Items> isaac = snapshot.data!;
               return Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: ListView.builder(
-                    itemCount: cove.length,
+                    itemCount: isaac.length,
                     itemBuilder: (context, index) {
-                      CV dog = cove[index];
+                      Items item = isaac[index];
                       return Card(
                           margin: const EdgeInsets.only(bottom: 15),
                           child: Padding(
@@ -49,7 +50,7 @@ class _CVListScreenState extends State<CVListScreen> {
                                       CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          dog.name,
+                                          item.name,
                                           style: const TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold),
@@ -57,7 +58,7 @@ class _CVListScreenState extends State<CVListScreen> {
                                         const SizedBox(
                                           height: 10,
                                         ),
-                                        Text('Age: ${dog.age}')
+                                        Text('Descripción: ${item.description}')
                                       ],
                                     ),
                                   ),
@@ -69,7 +70,7 @@ class _CVListScreenState extends State<CVListScreen> {
                                             await Navigator.of(context)
                                                 .push(MaterialPageRoute(
                                                 builder: (context) {
-                                                  return UpdateCVScreen(cv: dog);
+                                                  return UpdateItemsScreen(items: item);
                                                 }));
 
                                             if (result == 'done') {
@@ -108,14 +109,14 @@ class _CVListScreenState extends State<CVListScreen> {
                                                             int result =
                                                             await DatabaseHelper
                                                                 .instance
-                                                                .deleteDog(
-                                                                dog.id!);
+                                                                .deleteItem(
+                                                                item.id!);
 
                                                             if (result > 0) {
                                                               Fluttertoast
                                                                   .showToast(
                                                                   msg:
-                                                                  'Eliminando Compra/Venta...');
+                                                                  'Eliminando...');
                                                               setState(() {});
                                                               // build function will be called
                                                             }

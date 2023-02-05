@@ -1,20 +1,20 @@
-import 'package:dogs_db_pseb_bridge/db/database_helper.dart';
-import 'package:dogs_db_pseb_bridge/models/cv.dart';
-import 'package:dogs_db_pseb_bridge/screens/cv_list_screen.dart';
+import 'package:isaac_flutter/db/database_helper.dart';
+import 'package:isaac_flutter/models/items.dart';
+import 'package:isaac_flutter/screens/list_items_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class AddCVScreen extends StatefulWidget {
-  const AddCVScreen({Key? key}) : super(key: key);
+class AddItemsScreen extends StatefulWidget {
+  const AddItemsScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddCVScreen> createState() => _AddCVScreenState();
+  State<AddItemsScreen> createState() => _AddItemsScreenState();
 }
 
-class _AddCVScreenState extends State<AddCVScreen> {
+class _AddItemsScreenState extends State<AddItemsScreen> {
   late String name;
-  late int date;
-  late int btc;
+  late String description;
+  late String image;
   var formKey = GlobalKey<FormState>();
 
 
@@ -22,7 +22,7 @@ class _AddCVScreenState extends State<AddCVScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Compra/Venta'),
+        title: const Text('Añadir Ítem'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -33,16 +33,12 @@ class _AddCVScreenState extends State<AddCVScreen> {
               children: [
                 TextFormField(
                   decoration: const InputDecoration(
-                      hintText: 'Compra o Venta?'
+                      hintText: 'Nombre'
                   ),
                   validator: (String? value){
-
-                    if(value == null || value.isEmpty || value != "Compra") {
-                      if(value == null || value != "Venta") {
-                        return 'Tienes que introducir "Compra" o "Venta"';
+                      if(value == null || value.isEmpty) {
+                        return 'Tienes que introducir el nombre del ítem';
                       }
-                    }
-
 
                     name = value;
                     return null;
@@ -50,31 +46,29 @@ class _AddCVScreenState extends State<AddCVScreen> {
                 ),
                 const SizedBox(height: 10,),
                 TextFormField(
-                  keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                      hintText: 'Fecha'
+                      hintText: 'Descripción'
                   ),
                   validator: (String? value){
                     if( value == null || value.isEmpty){
-                      return 'Tienes que introducir la fecha seguida';
+                      return 'Tienes que introducir una descripción';
                     }
 
-                    date = int.parse(value);
+                    description = value;
                     return null;
                   },
                 ),
                 const SizedBox(height: 10,),
                 TextFormField(
-                  keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                      hintText: 'Cantidad Bitcoins'
+                      hintText: 'Imagen'
                   ),
                   validator: (String? value){
                     if( value == null || value.isEmpty){
-                      return 'Tienes que introducir la cantidad de bitcoins';
+                      return 'Tienes que introducir la imagen';
                     }
 
-                    date = int.parse(value);
+                    image = value;
                     return null;
                   },
                 ),
@@ -84,23 +78,23 @@ class _AddCVScreenState extends State<AddCVScreen> {
 
                   if( formKey.currentState!.validate()){
 
-                    var cove = CV(name: name, age: date);
+                    var items = Items(name: name, description: description, image: image);
 
                     var dbHelper =  DatabaseHelper.instance;
-                    int result = await dbHelper.insertDog(cove);
+                    int result = await dbHelper.insertItem(items);
 
                     if( result > 0 ){
-                      Fluttertoast.showToast(msg: 'Guardando Compra/Venta...');
+                      Fluttertoast.showToast(msg: 'Guardando...');
                     }
                   }
 
 
-                }, child: const Text('Guardar Compra/Venta')),
+                }, child: const Text('Guardar')),
                 ElevatedButton(onPressed: (){
                   Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                    return const CVListScreen();
+                    return const ItemsListScreen();
                   }));
-                }, child: const Text('Ver listado de Compra/Venta')),
+                }, child: const Text('Ver listado de Items')),
 
               ],
             ),

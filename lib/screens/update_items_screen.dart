@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:isaac_flutter/models/items.dart';
 
 import '../db/database_helper.dart';
-import '../models/cv.dart';
 
-class UpdateCVScreen extends StatefulWidget {
-  final CV cv;
+class UpdateItemsScreen extends StatefulWidget {
+  final Items items;
 
-  const UpdateCVScreen({Key? key, required this.cv}) : super(key: key);
+  const UpdateItemsScreen({Key? key, required this.items}) : super(key: key);
 
   @override
-  State<UpdateCVScreen> createState() => _UpdateCVScreenState();
+  State<UpdateItemsScreen> createState() => _UpdateItemsScreenState();
 }
 
-class _UpdateCVScreenState extends State<UpdateCVScreen> {
+class _UpdateItemsScreenState extends State<UpdateItemsScreen> {
   late String name;
-  late int age;
+  late String description;
+  late String image;
+
 
   var formKey = GlobalKey<FormState>();
 
@@ -23,7 +25,7 @@ class _UpdateCVScreenState extends State<UpdateCVScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Update Compra/Venta'),
+        title: const Text('Actualizar Ítems'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -33,13 +35,11 @@ class _UpdateCVScreenState extends State<UpdateCVScreen> {
             child: Column(
               children: [
                 TextFormField(
-                  initialValue: widget.cv.name,
-                  decoration: const InputDecoration(hintText: 'Compra o Venta?'),
+                  initialValue: widget.items.name,
+                  decoration: const InputDecoration(hintText: 'Nombre'),
                   validator: (String? value) {
-                    if(value == null || value.isEmpty || value != "Compra") {
-                      if(value == null || value != "Venta") {
-                        return 'Tienes que introducir "Compra" o "Venta"';
-                      }
+                    if (value == null || value.isEmpty) {
+                      return 'Tienes que introducir un nombre.';
                     }
 
                     name = value;
@@ -50,15 +50,29 @@ class _UpdateCVScreenState extends State<UpdateCVScreen> {
                   height: 10,
                 ),
                 TextFormField(
-                  initialValue: widget.cv.age.toString(),
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(hintText: 'Compra/Venta date'),
+                  initialValue: widget.items.description,
+                  decoration: const InputDecoration(hintText: 'Descripción'),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please provide Compra/Venta date';
+                      return 'Tienes que introducir una descripción.';
                     }
 
-                    age = int.parse(value);
+                    description = value;
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  initialValue: widget.items.image,
+                  decoration: const InputDecoration(hintText: 'Imagen'),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Tienes que introducir una imagen.';
+                    }
+
+                    image = value;
                     return null;
                   },
                 ),
@@ -68,19 +82,19 @@ class _UpdateCVScreenState extends State<UpdateCVScreen> {
                 ElevatedButton(
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
-                        var dog = CV(id: widget.cv.id, name: name, age: age);
+                        var items = Items(name: name, description: description, image: image);
 
                         var dbHelper = DatabaseHelper.instance;
-                        int result = await dbHelper.updateCV(dog);
+                        int result = await dbHelper.updateItem(items);
 
                         if (result > 0) {
-                          Fluttertoast.showToast(msg: 'Dog Updated');
-                          Navigator.pop(context, 'done');
+                          Fluttertoast.showToast(msg: 'Ítem actualizado');
+                          Navigator.pop(context, 'Hecho');
 
                         }
                       }
                     },
-                    child: const Text('Update')),
+                    child: const Text('Actualizar')),
               ],
             ),
           ),
